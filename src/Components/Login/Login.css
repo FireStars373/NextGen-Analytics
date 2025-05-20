@@ -1,0 +1,140 @@
+.page-wrapper {
+  display: flex;
+  justify-content: center; /* horizontal centering */
+  align-items: center; /* vertical centering */
+  height: 100vh; /* full viewport height */
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: auto; /* redundant if parent handles centering */
+  align-self: center;
+  padding-bottom: 30px;
+  background: #212121;
+  border-radius: 15px;
+  box-shadow: 15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60);
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 20px;
+}
+.text {
+  color: #fdfbf4;
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  width: 90%;
+
+  border-bottom: 5px solid #00b7ff;
+}
+.underline {
+  width: 150px;
+  height: 5px;
+  background-color: #fdfbf4;
+  border-radius: 9px;
+}
+.underline-2 {
+  width: 100%;
+  height: 10px;
+  background-color: rgb(179, 179, 179);
+  border-radius: 9px;
+}
+.underline-3 {
+  width: 100%;
+  height: 10px;
+  background-color: #3d0000;
+  border-radius: 9px;
+}
+.inputs {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.input {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 350px;
+  height: 60px;
+}
+.input img {
+  margin: auto 20px;
+  filter: invert(90%);
+}
+.input input {
+  height: 50px;
+  width: 400px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid black;
+  margin-left: 15px;
+  outline: none;
+  color: #fdfbf4;
+  font-size: 16px;
+}
+.forgot-password {
+  margin: auto;
+  color: rgb(82, 0, 0);
+  font-size: 16px;
+  cursor: pointer;
+}
+.sign-up {
+  margin: auto;
+  color: #fdfbf4;
+  font-size: 16px;
+}
+.sign-up span {
+  color: #fdfbf4;
+  cursor: pointer;
+  border-bottom: 2px solid #00b7ff;
+}
+.submit-container {
+  gap: 10px;
+  margin: auto;
+}
+.submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 220px;
+  height: 60px;
+  margin-top: 35px;
+  color: #fdfbf4;
+  background: #37522a;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.submit:hover {
+  background: #23351b;
+}
+.words {
+  font-size: 24px;
+  margin-left: 80px;
+  color: #fdfbf4;
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  width: 128px;
+  height: 128px;
+  margin-left: auto;
+  margin-top: 10px;
+  margin-right: auto;
+  padding-right: 30px;
+}
+.logo img {
+  height: 100px;
+}
+
+.outside-signin {
+  display: flex;
+  justify-content: center;
+}

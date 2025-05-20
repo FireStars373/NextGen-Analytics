@@ -1,0 +1,140 @@
+.compare-teams-container {
+  max-width: 1200px;
+  margin: 20px auto 100px auto;
+  padding: 30px;
+  color: #fff;
+  background-color: #212121;
+  box-shadow: 15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60);
+  border-radius: 20px;
+}
+
+.teams-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 20px;
+  padding-bottom: 30px;
+  border-bottom: 4px solid #00b7ff;
+}
+
+.team1-header,
+.team2-header {
+  font-size: 28px;
+  font-weight: bold;
+  padding: 15px;
+  text-align: center;
+  background: #2e2e2e;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+  font-size: 22px;
+  text-align: center;
+  font-weight: bold;
+  padding: 15px;
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 15px 0;
+  align-items: center;
+  transition: background-color 0.3s;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.comparison-row:hover {
+  background-color: #2e2e2e;
+}
+
+.team1-stat,
+.team2-stat {
+  font-size: 24px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.stat-name {
+  font-size: 18px;
+  padding: 15px;
+  text-align: center;
+  font-weight: 500;
+  color: #bbb;
+}
+
+.team1-stat.better,
+.team2-stat.better {
+  color: #4caf50;
+  font-weight: bold;
+  transform: scale(1.05);
+  background: linear-gradient(
+    135deg,
+    rgba(76, 175, 80, 0.1),
+    rgba(66, 151, 68, 0.3)
+  );
+  box-shadow: 0 0 100px 100px rgba(66, 151, 68, 0.3);
+  border-radius: 4px;
+}
+
+.back-button-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.back-button {
+  padding: 10px;
+  background-color: #212121;
+  border: 2px solid #00b7ff;
+  border-radius: 15px;
+  color: #fdfbf4;
+  font-size: 16px;
+  width: 300px;
+}
+
+.back-button:hover {
+  background-color: #2e2e2e;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 50px;
+  font-size: 24px;
+  color: #fff;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+@media (max-width: 768px) {
+  .compare-teams-container {
+    padding: 15px;
+  }
+
+  .teams-header {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .team1-header,
+  .team2-header {
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .stat-label {
+    font-size: 16px;
+  }
+
+  .team1-stat,
+  .team2-stat {
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .stat-name {
+    font-size: 14px;
+  }
+}
