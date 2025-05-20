@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+.nav {
+  background-color: transparent;
+  height: 75px;
+  color: #fdfbf4;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+.navicon {
+  width: 30px;
+  height: 30px;
+}
+.navicon:hover {
+  color: #00b7ff;
+}
+.navicons {
+  gap: 0rem;
+  display: flex;
+}
+.nav a {
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  font-size: 30px;
+}
+.nav ul {
+  padding: 0;
+  margin: 0;
+  font-size: 26px;
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+.nav li:hover {
+  color: #00b7ff;
+  border-radius: 15px;
+}
+.nav .dropdown {
+  position: relative;
+}
+.dropdown-menu {
+  position: fixed !important;
+  right: 0;
+  z-index: 9999 !important;
+  background-color: inherit;
+  border: 2px solid #00b7ff;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  display: none;
+}
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Optional styling tweak — no fixed positioning here */
+.custom-nav-dropdown .dropdown-menu {
+  background-color: #212121;
+  border: 2px solid #00b7ff;
+  border-radius: 8px;
+  width: fit-content;
+}
+.custom-nav-dropdown .dropdown-item {
+  color: #fdfbf4;
+  font-size: 16px;
+}
+.nav .dropdown-item a {
+  color: inherit;
+  text-decoration: none;
+  width: 500px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+}

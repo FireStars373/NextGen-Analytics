@@ -1,0 +1,235 @@
+.team-stats-container {
+  padding: 20px;
+  color: white;
+}
+
+.selector-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.reset-sort-btn {
+  padding: 8px 16px;
+  border: 2px solid #555;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #555;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-sort-btn:hover:not(:disabled) {
+  background-color: #666;
+  transform: scale(1.05);
+}
+
+.reset-sort-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.team-select {
+  padding: 8px 16px;
+  border: 2px solid #555;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #555;
+  color: #fdfbf4;
+  cursor: pointer;
+  width: 400px;
+  height: 45px;
+}
+
+.team-select option {
+  background-color: #555;
+  color: #fdfbf4;
+}
+
+.team-overview {
+  display: grid;
+  margin: 50px 80px 50px 80px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: #212121;
+  box-shadow: 5px 5px 10px rgb(25, 25, 25), -5px -5px 10px rgb(60, 60, 60);
+  border-radius: 15px;
+  padding: 20px;
+  border: none;
+  justify-items: center;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+.stat-card h3 {
+  border-bottom: 3px solid #00b7ff;
+  width: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+.stat-card.selected {
+  transform: translateY(-10px);
+  background-color: #212121;
+  box-shadow: 15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60);
+  border-radius: 15px;
+  border: 3px solid #00b7ff;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px 0;
+  color: #fdfbf4;
+  font-size: 18px;
+  padding-bottom: 8px;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #fdfbf4;
+}
+
+.stat-card-changing {
+  background-color: #212121;
+  box-shadow: 15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60);
+  border-radius: 15px;
+  padding: 30px;
+  width: 800px;
+  height: 400px;
+  border-radius: 15px;
+  justify-self: center;
+}
+
+.about-team {
+  display: flex;
+  background-color: #212121;
+  box-shadow: 15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60);
+  border-radius: 15px;
+  padding: 30px;
+  width: 75%;
+  height: fit-content;
+  margin: 15px;
+  border-radius: 15px;
+  justify-self: center;
+}
+.about-team img {
+  height: 100px;
+}
+.about-team p {
+  margin-left: 50px;
+  font-size: 24px;
+}
+.newest-change {
+  display: flex;
+  gap: 100px;
+  margin: 50px 100px;
+}
+.newest-change-card {
+  background-color: #212121;
+  box-shadow: 15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60);
+  border-radius: 15px;
+  text-align: center;
+  width: 100%;
+  height: auto;
+}
+
+.follow-label {
+  background-color: #212121;
+  height: 45px;
+  display: flex;
+  gap: 14px;
+  padding: 10px 15px 10px 10px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 15px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  color: rgb(255, 255, 255);
+}
+
+.follow-input {
+  display: none;
+}
+
+.follow-input:checked + label svg {
+  fill: #00b7ff;
+  stroke: #00b7ff;
+  animation: heartButton 1s;
+}
+
+@keyframes heartButton {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.3);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  75% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.follow-input + label .action {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+}
+
+.follow-input + label .action span {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  transition: all 0.5s;
+}
+
+.follow-input + label .action span.option-1 {
+  transform: translate(0px, 0%);
+  font-size: 20px;
+  opacity: 1;
+}
+
+.follow-input:checked + label .action span.option-1 {
+  transform: translate(0px, -100%);
+  font-size: 20px;
+  opacity: 0;
+}
+
+.follow-input + label .action span.option-2 {
+  transform: translate(0px, 100%);
+  font-size: 20px;
+  opacity: 0;
+}
+
+.follow-input:checked + label .action span.option-2 {
+  transform: translate(0px, 0%);
+  font-size: 20px;
+  opacity: 1;
+}
+.group-input-follow {
+  display: flex;
+  gap: 30px;
+}
+.group-input-follow select {
+  padding: 10px;
+  background-color: #212121 !important;
+  border: 2px solid #00b7ff;
+  border-radius: 15px;
+  color: #fdfbf4;
+  font-size: 16px;
+}

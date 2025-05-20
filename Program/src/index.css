@@ -1,0 +1,127 @@
+body {
+  margin: 0;
+  font-family: Helvetica;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: gradientShift 10s ease infinite;
+  background-size: 400% 400%;
+  background: linear-gradient(-45deg, #2b2b2b, #172127, #122127, #3d3d3d);
+}
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  color: #fdfbf4;
+  font-size: 48px;
+  background-color: none;
+  margin-right: 100px;
+  margin-left: 100px;
+  padding: 10px;
+  border-radius: 15px;
+}
+h2 {
+  color: #fdfbf4;
+  font-size: 36px;
+}
+h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  padding-bottom: 8px;
+}
+text {
+  font-size: 16px;
+  color: #fdfbf4;
+  margin-bottom: 2px;
+}
+p {
+  font-size: 18px;
+  margin: 5px 0;
+  color: #fdfbf4;
+}
+li {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #fdfbf4;
+}
+a {
+  color: #fdfbf4;
+  font-size: 18px;
+  text-decoration: none;
+}
+a:hover {
+  color: grey;
+}
+label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #fdfbf4;
+}
+span {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #fdfbf4;
+}
+textarea {
+  width: 100%;
+  padding: 10px 15px 10px 15px;
+  background-color: #2b2b2b;
+  border: none;
+  border-radius: 15px;
+  color: #fdfbf4;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.clear-button {
+  background-color: #971818;
+  width: 200px;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 80px;
+}
+
+.clear-button:hover {
+  background-color: #551818;
+}
+
+.error-message {
+  color: #ff0000;
+  background-color: #ffe6e6;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 50px;
+  text-align: center;
+  font-size: 14px;
+}
+.success-message {
+  color: #5bd15f;
+  background-color: #e8f5e9;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 50px;
+  text-align: center;
+  font-size: 14px;
+}
