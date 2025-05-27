@@ -3,10 +3,10 @@ require("dotenv").config();
 
 // Create a connection pool
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "kvs_krepsinio_analize",
+  host: process.env.DB_HOST || "yamabiko.proxy.rlwy.net",
+  user: process.env.DB_USER || "railway",
+  password: process.env.DB_PASSWORD || "t9dkR4WoA75.qj_n4TlP1GlRXHQ_G6Tg",
+  database: process.env.DB_NAME || "railway",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
