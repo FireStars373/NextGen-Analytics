@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronUp, ChevronDown, Minus, X } from "lucide-react";
 import "./Ratings.css";
-import Mirotic from "../Assets/PlayerPhoto/Mirotic.png";
-import Lessort from "../Assets/PlayerPhoto/lessort.png";
-import Vezenkov from "../Assets/PlayerPhoto/14.png";
 import getTopPlayers from "../MainPage/GetTopPlayers";
 import calculateEfficiencyRating from "../MainPage/CalculateEfficientyPlayers";
 import BetOverlay from "../BetOverlay/BetOverlay";
@@ -108,21 +105,23 @@ export const Ratings = () => {
     if (user?.premium_status === 1) {
       return true;
     }
-    // If free user, only show players ranked 20-30
-    return index >= 19 && index < 30;
+    // If free user, only show players ranked 40-50
+    return index >= 39 && index < 50;
   });
 
   // Filtering
-  const filtered = filteredPlayers.filter((p) => {
-    const matchesSearch =
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.team.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTeam = selectedTeam === "all" || p.team === selectedTeam;
-    const matchesPosition =
-      positionFilter === "all" || p.position === positionFilter;
+  const filtered = filteredPlayers
+    .filter((p) => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.team.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesTeam = selectedTeam === "all" || p.team === selectedTeam;
+      const matchesPosition =
+        positionFilter === "all" || p.position === positionFilter;
 
-    return matchesSearch && matchesTeam && matchesPosition;
-  });
+      return matchesSearch && matchesTeam && matchesPosition;
+    })
+    .slice(0, 50);
 
   // Sorting
   const sorted = [...filtered].sort((a, b) => {
@@ -175,16 +174,6 @@ export const Ratings = () => {
     }
     return "";
   };
-
-  const playerPhotos = {
-    "Nicola Mirotic": Mirotic,
-    "Mathias Lessort": Lessort,
-    "Sasha Vezenkov": Vezenkov,
-  };
-
-  const logo = playerPhotos[top3.id];
-  console.log(playerPhotos);
-  console.log(logo);
 
   const handleTeamClick = (team) => navigate(`/TeamStats/${team}`);
   const handlePlayerClick = (player) => navigate(`/TeamPlayers/${player}`);
@@ -317,7 +306,10 @@ export const Ratings = () => {
           <div className="player-container">
             <div className="player-header">
               <div className="player-photo-container">
-                <img src={player1.photo} alt={player1.name} />
+                <img
+                  src={`http://localhost:5000${player1.photo}`}
+                  alt={player1.name}
+                />
               </div>
               <div className="player-details">
                 <h3>{player1.name}</h3>
@@ -330,7 +322,10 @@ export const Ratings = () => {
             {/* Player 2 Column */}
             <div className="player-header">
               <div className="player-photo-container">
-                <img src={player2.photo} alt={player2.name} />
+                <img
+                  src={`http://localhost:5000${player2.photo}`}
+                  alt={player2.name}
+                />
               </div>
               <div className="player-details">
                 <h3>{player2.name}</h3>
@@ -573,7 +568,7 @@ export const Ratings = () => {
         >
           <h3 style={{ borderBottom: "3px solid #00b7ff" }}>Premium Feature</h3>
           <p>
-            Free users can only view players ranked 20-30. Upgrade to Premium to
+            Free users can only view players ranked 40-50. Upgrade to Premium to
             see all player rankings!
           </p>
           <button
@@ -592,7 +587,6 @@ export const Ratings = () => {
           <div className="top-players-section">
             <div className="top-players">
               {top3.map((player, idx) => {
-                const logo = playerPhotos[player.name];
                 return (
                   <div
                     key={player.id}
@@ -607,33 +601,35 @@ export const Ratings = () => {
                     <div className="top-player-photo">
                       <img
                         style={{ width: "130px" }}
-                        src={logo}
+                        src={`http://localhost:5000${player.photo}`}
                         alt={`${player.name} photo`}
                       />
                     </div>
-                    <center>
-                      <h3 style={{ fontSize: "32px" }}>{player.name}</h3>
-                      <p style={{ opacity: "50%" }}>
-                        {player.team} | {player.position}
-                      </p>
-                    </center>
-                    <div className="top-player-stats">
-                      <div className="stat">
-                        <text>MIN</text>
-                        <text className="stat-value">
-                          {player.minutes || 0}
-                        </text>
-                      </div>
-                      <div className="stat">
-                        <text>PTS</text>
-                        <text className="stat-value">{player.points}</text>
-                      </div>
-                      <div className="stat-highlight">
-                        <text style={{ fontWeight: "bold" }}>ERR</text>
-                        <text className="stat-value">
-                          {calculateEfficiencyRating(player)}
-                        </text>
-                      </div>
+                    <div className="top-player-info">
+                      <center>
+                        <h3 style={{ fontSize: "32px" }}>{player.name}</h3>
+                        <p style={{ opacity: "50%" }}>
+                          {player.team} | {player.position}
+                        </p>
+                        <div className="top-player-stats">
+                          <div className="stat">
+                            <text>MIN</text>
+                            <text className="stat-value">
+                              {player.minutes || 0}
+                            </text>
+                          </div>
+                          <div className="stat">
+                            <text>PTS</text>
+                            <text className="stat-value">{player.points}</text>
+                          </div>
+                          <div className="stat-highlight">
+                            <text style={{ fontWeight: "bold" }}>ERR</text>
+                            <text className="stat-value">
+                              {calculateEfficiencyRating(player)}
+                            </text>
+                          </div>
+                        </div>
+                      </center>
                     </div>
                   </div>
                 );

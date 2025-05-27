@@ -66,4 +66,27 @@ router.get("/team/:teamId", async (req, res) => {
   }
 });
 
+// GET player stats for a match
+router.get("/:id/player-stats", async (req, res) => {
+  try {
+    const [stats] = await db.query(
+      `SELECT emp.*, p.name as player_name, t.name as team_name 
+       FROM euroleaguematchplayers emp
+       JOIN players p ON emp.player_id = p.id
+       JOIN teams t ON emp.team_id = t.id
+       WHERE emp.match_id = ?`,
+      [req.params.id]
+    );
+
+    if (stats.length === 0) {
+      return res.status(404).json({ message: "No player stats found for this match" });
+    }
+
+    res.json(stats);
+  } catch (err) {
+    console.error("Error fetching player stats:", err);
+    res.status(500).json({ message: "Error fetching player stats", error: err.message });
+  }
+});
+
 module.exports = router;

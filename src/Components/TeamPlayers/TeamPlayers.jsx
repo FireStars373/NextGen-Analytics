@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./TeamPlayers.css";
 import Graphs from "../Graphs/Graphs";
-import Tavares from "../Assets/PlayerPhoto/Walter_Tavares.png.png";
 import BetOverlay from "../BetOverlay/BetOverlay";
 
 const tempData = {
-  "Walter Tavares": [
+  "Nikola Mirotic": [
     {
       min: 24,
       pts: 10,
@@ -105,6 +104,7 @@ export const TeamPlayers = () => {
   const [selectedStatTwo, setSelectedStatTwo] = useState(null);
 
   const [players, setPlayers] = useState([]);
+  const [playerStats, setPlayerStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { PlayersId } = useParams();
@@ -127,13 +127,20 @@ export const TeamPlayers = () => {
       try {
         setLoading(true);
         const response1 = await fetch(`${BACKEND_URL}/api/players`);
+        const response2 = await fetch(`${BACKEND_URL}/api/player_stats`);
 
         if (!response1.ok) {
           throw new Error(`HTTP error! Status: ${response1.status}`);
         }
         const data1 = await response1.json();
 
+        if (!response2.ok) {
+          throw new Error(`HTTP error! Status: ${response2.status}`);
+        }
+        const data2 = await response2.json();
+
         setPlayers(data1);
+        setPlayerStats(data2);
         setLoading(false);
       } catch (err) {
         setError(`Error fetching teams data: ${err.message}`);
@@ -154,6 +161,10 @@ export const TeamPlayers = () => {
       player.team.toLowerCase() === selectedDataPlayer.team.toLowerCase()
   );
 
+  const selectedPlayerStats = playerStats.filter(
+    (playerStats) => playerStats.player_id === selectedDataPlayer.id
+  );
+  console.log(selectedPlayerStats);
   const resetSort = () => {
     setSortConfig({ key: null, direction: "asc" });
     setSearchTerm("");
@@ -246,8 +257,6 @@ export const TeamPlayers = () => {
     navigate(`/TeamStats/${team}`);
   };
   const scores = tempData[selectedDataPlayer.name] || [];
-  console.log(scores);
-  console.log(selectedDataPlayer.photo);
 
   const handlePurchaseFact = async (factNumber) => {
     if (user.Credit_count > 0) {
@@ -304,9 +313,11 @@ export const TeamPlayers = () => {
       {/* Player Profile Section */}
       <div className="player-overview">
         <div className="player-profile">
-          <div className="player-photo">
-            <img src={Tavares} alt={selectedDataPlayer.name} />
-          </div>
+          <img
+            style={{ height: "300px" }}
+            src={`http://localhost:5000${selectedDataPlayer.photo}`}
+            alt={selectedDataPlayer.name}
+          />
           <div className="player-info">
             <h2>{selectedDataPlayer.name}</h2>
 
@@ -315,9 +326,6 @@ export const TeamPlayers = () => {
             </p>
             <p>Number: #{selectedDataPlayer.number}</p>
             <p>Position: {selectedDataPlayer.position}</p>
-            <p>Nationality: {selectedDataPlayer.nationality}</p>
-            <p>Date of Birth: {selectedDataPlayer.height}</p>
-            <p>Height: {selectedDataPlayer.data_of_birth}</p>
             <div className="player-stats-grid">
               <div className="stats-section">
                 <h3>Averages</h3>
@@ -502,10 +510,10 @@ export const TeamPlayers = () => {
             {selectedStatOne === "min" && (
               <Graphs
                 title="MIN"
-                chartData={scores.map((entry, index) => ({
+                chartData={selectedPlayerStats.map((entry, index) => ({
                   game: `G${index + 1}`,
-                  score: entry.min,
-                  result: entry.result,
+                  score: entry.minutes,
+                  result: entry.result ?? "N/A",
                 }))}
                 dataKey="score"
                 useResultColor={false}
@@ -514,9 +522,9 @@ export const TeamPlayers = () => {
             {selectedStatOne === "pts" && (
               <Graphs
                 title="PTS"
-                chartData={scores.map((entry, index) => ({
+                chartData={selectedPlayerStats.map((entry, index) => ({
                   game: `G${index + 1}`,
-                  score: entry.pts,
+                  score: entry.points,
                   result: entry.result,
                 }))}
                 dataKey="score"
@@ -526,9 +534,9 @@ export const TeamPlayers = () => {
             {selectedStatOne === "reb" && (
               <Graphs
                 title="REB"
-                chartData={scores.map((entry, index) => ({
+                chartData={selectedPlayerStats.map((entry, index) => ({
                   game: `G${index + 1}`,
-                  score: entry.reb,
+                  score: entry.rebounds,
                   result: entry.result,
                 }))}
                 dataKey="score"
@@ -538,9 +546,9 @@ export const TeamPlayers = () => {
             {selectedStatOne === "ast" && (
               <Graphs
                 title="AST"
-                chartData={scores.map((entry, index) => ({
+                chartData={selectedPlayerStats.map((entry, index) => ({
                   game: `G${index + 1}`,
-                  score: entry.ast,
+                  score: entry.assists,
                   result: entry.result,
                 }))}
                 dataKey="score"
@@ -550,9 +558,9 @@ export const TeamPlayers = () => {
             {selectedStatOne === "stl" && (
               <Graphs
                 title="STL"
-                chartData={scores.map((entry, index) => ({
+                chartData={selectedPlayerStats.map((entry, index) => ({
                   game: `G${index + 1}`,
-                  score: entry.stl,
+                  score: entry.steals,
                   result: entry.result,
                 }))}
                 dataKey="score"
@@ -562,9 +570,9 @@ export const TeamPlayers = () => {
             {selectedStatOne === "blk" && (
               <Graphs
                 title="BLK"
-                chartData={scores.map((entry, index) => ({
+                chartData={selectedPlayerStats.map((entry, index) => ({
                   game: `G${index + 1}`,
-                  score: entry.blk,
+                  score: entry.blocks,
                   result: entry.result,
                 }))}
                 dataKey="score"
@@ -578,9 +586,9 @@ export const TeamPlayers = () => {
                 </center>
                 <Graphs
                   title="MIN"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
-                    score: entry.min,
+                    score: entry.minutes,
                     result: entry.result,
                   }))}
                   dataKey="score"
@@ -596,9 +604,9 @@ export const TeamPlayers = () => {
               {selectedStatTwo === "2fg" && (
                 <Graphs
                   title="2FG"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
-                    score: entry.fg2,
+                    score: entry.fg2_made,
                     result: entry.result,
                   }))}
                   dataKey="score"
@@ -608,9 +616,9 @@ export const TeamPlayers = () => {
               {selectedStatTwo === "3fg" && (
                 <Graphs
                   title="3FG"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
-                    score: entry.fg3,
+                    score: entry.fg3_made,
                     result: entry.result,
                   }))}
                   dataKey="score"
@@ -620,9 +628,9 @@ export const TeamPlayers = () => {
               {selectedStatTwo === "ft" && (
                 <Graphs
                   title="FT"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
-                    score: entry.ft,
+                    score: entry.ft_made,
                     result: entry.result,
                   }))}
                   dataKey="score"
@@ -632,9 +640,9 @@ export const TeamPlayers = () => {
               {selectedStatTwo === "to" && (
                 <Graphs
                   title="TO"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
-                    score: entry.to,
+                    score: entry.turnovers,
                     result: entry.result,
                   }))}
                   dataKey="score"
@@ -644,9 +652,9 @@ export const TeamPlayers = () => {
               {selectedStatTwo === "fouls" && (
                 <Graphs
                   title="FOULS"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
-                    score: entry.fouls,
+                    score: entry.fouls_received,
                     result: entry.result,
                   }))}
                   dataKey="score"
@@ -656,7 +664,7 @@ export const TeamPlayers = () => {
               {selectedStatTwo === "pir" && (
                 <Graphs
                   title="PIR"
-                  chartData={scores.map((entry, index) => ({
+                  chartData={selectedPlayerStats.map((entry, index) => ({
                     game: `G${index + 1}`,
                     score: entry.pir,
                     result: entry.result,
@@ -672,9 +680,9 @@ export const TeamPlayers = () => {
                   </center>
                   <Graphs
                     title="FT"
-                    chartData={scores.map((entry, index) => ({
+                    chartData={selectedPlayerStats.map((entry, index) => ({
                       game: `G${index + 1}`,
-                      score: entry.ft,
+                      score: entry.ft_made,
                       result: entry.result,
                     }))}
                     dataKey="score"
@@ -726,35 +734,17 @@ export const TeamPlayers = () => {
         <div className="facts-container">
           <div className="fact">
             <h3>Fact 1:</h3>
-            <p>
-              Walter Tavares, standing at 7'3" (221 cm), is known as a
-              basketball giant, but off the court, he's considered one of the
-              nicest, most down-to-earth players. Despite his intimidating size,
-              teammates often describe him as a "gentle giant." He's more likely
-              to help someone with their bags than dunk on them.
-            </p>
+            <p>{selectedDataPlayer.fact_1}</p>
           </div>
           {user?.premium_status === 1 || unlockedFacts.includes(2) ? (
             <div className="fact">
               <h3>Fact 2:</h3>
-              <p>
-                Walter's wingspan is rumored to be around 7'9" (236 cm). It's so
-                long that when he reaches out to grab a basketball, it's like
-                he's in a different zip code. The guy doesn't need a ladder to
-                dunk; he just reaches the basket like he's picking fruit from a
-                tree.
-              </p>
+              <p>{selectedDataPlayer.fact_2}</p>
             </div>
           ) : (
             <div className="fact" style={{ opacity: 0.7, textAlign: "center" }}>
               <h3>Fact 2 (Locked)</h3>
-              <p style={{ filter: "blur(5px)" }}>
-                Walter's wingspan is rumored to be around 7'9" (236 cm). It's so
-                long that when he reaches out to grab a basketball, it's like
-                he's in a different zip code. The guy doesn't need a ladder to
-                dunk; he just reaches the basket like he's picking fruit from a
-                tree.
-              </p>
+              <p style={{ filter: "blur(5px)" }}>{selectedDataPlayer.fact_2}</p>
               <button
                 className="submit-button"
                 onClick={() => handlePurchaseFact(2)}
@@ -767,24 +757,12 @@ export const TeamPlayers = () => {
           {user?.premium_status === 1 || unlockedFacts.includes(3) ? (
             <div className="fact">
               <h3>Fact 3:</h3>
-              <p>
-                Tavares is known for his exceptional basketball IQ, but fans
-                sometimes get a glimpse of his "other talents" off the court. If
-                you check out his social media, you might see a dance move or
-                two that'll have you wondering if he's preparing for a future in
-                both basketball and salsa.
-              </p>
+              <p>{selectedDataPlayer.fact_3}</p>
             </div>
           ) : (
             <div className="fact" style={{ opacity: 0.7, textAlign: "center" }}>
               <h3>Fact 3 (Locked)</h3>
-              <p style={{ filter: "blur(5px)" }}>
-                Tavares is known for his exceptional basketball IQ, but fans
-                sometimes get a glimpse of his "other talents" off the court. If
-                you check out his social media, you might see a dance move or
-                two that'll have you wondering if he's preparing for a future in
-                both basketball and salsa.
-              </p>
+              <p style={{ filter: "blur(5px)" }}>{selectedDataPlayer.fact_3}</p>
               <button
                 className="submit-button"
                 onClick={() => handlePurchaseFact(3)}

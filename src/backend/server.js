@@ -8,6 +8,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require("./config/swagger");
 const teamsRoutes = require("./routes/teams");
 const playersRoutes = require("./routes/players");
+const playerStatsRoutes = require("./routes/playerStats");
 const matchRoutes = require("./routes/matches");
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use("/api/users", userRoutes);
 app.use("/api/teams", teamsRoutes);
 app.use("/api/players", playersRoutes);
+app.use("/api/player_stats", playerStatsRoutes);
 app.use("/api/euroleaguematches", matchRoutes);
 app.use(
   "/images",

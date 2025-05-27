@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Schedule.css";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronsRight, ChevronsLeft } from "lucide-react";
+import { ArrowRight, ChevronsRight, ChevronsLeft, Percent } from "lucide-react";
 import useFetchEuroleagueData from "../UseFetch/MatchData";
 import enrichMatches from "../MainPage/EnrichMatches";
 import BetOverlay from "../BetOverlay/BetOverlay";
@@ -77,8 +77,8 @@ export const Schedule = () => {
     return matchesSearch && matchesDate && matchesUpcomingFilter;
   });
 
-  const handleMatchOverview = () => {
-    navigate(`/MatchDetails`);
+  const handleMatchOverview = (matchId) => {
+    navigate(`/MatchDetails/${matchId}`);
   };
   const handlePlayerOverview = (player) => {
     navigate(`/TeamPlayers/${player}`);
@@ -98,8 +98,115 @@ export const Schedule = () => {
   const tempMVP = players[0];
   // Safeguard check for latestGame and homeTeam/awayTeam
   if (!latestGame || !latestGame.homeTeam || !latestGame.awayTeam) {
-    return <div>Match data is unavailable.</div>;
+    return;
   }
+
+  // Calculate win probability based on team efficiency ratings
+  const calculateWinProbability = (homeTeam, awayTeam) => {
+    if (!homeTeam || !awayTeam) return { homeProb: 50, awayProb: 50 };
+
+    // Calculate team efficiency (EFF)
+    const calculateTeamEff = (team) => {
+      if (!team) return 0;
+
+      // EFF = (PTS + REB + AST + STL + BLK) - (PTS_ALLOWED)
+      const positiveStats =
+        parseFloat(team.points_per_game || 0) +
+        parseFloat(team.rebounds || 0) +
+        parseFloat(team.assists || 0) +
+        parseFloat(team.steals || 0) +
+        parseFloat(team.blocks || 0);
+
+      const negativeStats = parseFloat(team.points_allowed || 0);
+
+      return positiveStats - negativeStats;
+    };
+
+    const homeEff = calculateTeamEff(homeTeam);
+    const awayEff = calculateTeamEff(awayTeam);
+
+    // Add home court advantage (3 efficiency points)
+    const homeEffWithAdvantage = homeEff + 3;
+
+    // Calculate total efficiency
+    const totalEff = Math.abs(homeEffWithAdvantage) + Math.abs(awayEff);
+
+    if (totalEff === 0) return { homeProb: 50, awayProb: 50 };
+
+    // Calculate probabilities
+    let homeProb = Math.round((homeEffWithAdvantage / totalEff) * 100);
+    let awayProb = Math.round((awayEff / totalEff) * 100);
+
+    // Ensure probabilities are between 0 and 100 and sum to 100
+    homeProb = Math.min(Math.max(homeProb, 0), 100);
+    awayProb = 100 - homeProb;
+
+    return {
+      homeProb,
+      awayProb,
+    };
+  };
+
+  // Update the generateWinArguments function to focus on efficiency
+  const generateWinArguments = (homeTeam, awayTeam) => {
+    if (!homeTeam || !awayTeam) return { home: [], away: [] };
+
+    const homeArgs = [];
+    const awayArgs = [];
+
+    // Calculate efficiency ratings
+    const calculateEff = (team) => {
+      return (
+        parseFloat(team.points_per_game || 0) +
+        parseFloat(team.rebounds || 0) +
+        parseFloat(team.assists || 0) +
+        parseFloat(team.steals || 0) +
+        parseFloat(team.blocks || 0) -
+        parseFloat(team.points_allowed || 0)
+      );
+    };
+
+    const homeEff = calculateEff(homeTeam);
+    const awayEff = calculateEff(awayTeam);
+
+    // Compare scoring
+    if (
+      parseFloat(homeTeam.points_per_game) >
+      parseFloat(awayTeam.points_per_game)
+    ) {
+      homeArgs.push(`Higher scoring team (${homeTeam.points_per_game} PPG)`);
+    } else {
+      awayArgs.push(`Higher scoring team (${awayTeam.points_per_game} PPG)`);
+    }
+
+    // Compare defense
+    if (
+      parseFloat(homeTeam.points_allowed) < parseFloat(awayTeam.points_allowed)
+    ) {
+      homeArgs.push(
+        `Better defensive team (${homeTeam.points_allowed} points allowed)`
+      );
+    } else {
+      awayArgs.push(
+        `Better defensive team (${awayTeam.points_allowed} points allowed)`
+      );
+    }
+
+    // Compare overall efficiency
+    if (homeEff > awayEff) {
+      homeArgs.push(`Higher efficiency rating (${homeEff.toFixed(1)} EFF)`);
+    } else {
+      awayArgs.push(`Higher efficiency rating (${awayEff.toFixed(1)} EFF)`);
+    }
+
+    // Add home court advantage
+    homeArgs.push("Home court advantage (+3 EFF bonus)");
+
+    return {
+      home: homeArgs,
+      away: awayArgs,
+    };
+  };
 
   return (
     <div>
@@ -239,7 +346,7 @@ export const Schedule = () => {
           <div className="game-details-overview-group">
             <text
               style={{ fontSize: "28px" }}
-              onClick={() => handleMatchOverview()}
+              onClick={() => handleMatchOverview(latestGame.id)}
             >
               More Information
             </text>
@@ -248,7 +355,7 @@ export const Schedule = () => {
                 width: "32px",
                 height: "32px",
               }}
-              onClick={() => handleMatchOverview()}
+              onClick={() => handleMatchOverview(latestGame.id)}
             ></ArrowRight>
           </div>
         </div>
@@ -285,6 +392,43 @@ export const Schedule = () => {
                   </p>
                 </td>
                 <td style={{ textAlign: "center", verticalAlign: "middle" }}>
+                  {new Date(match.match_date) > today ? (
+                    <div className="match-prediction">
+                      {(() => {
+                        const prob = calculateWinProbability(
+                          match.homeTeam,
+                          match.awayTeam
+                        );
+                        return (
+                          <div className="probability-display">
+                            <span
+                              className={
+                                prob.homeProb > prob.awayProb ? "winning" : ""
+                              }
+                            >
+                              {prob.homeProb}%
+                            </span>
+                            <span style={{ margin: "0 10px", color: "#666" }}>
+                              -
+                            </span>
+                            <span
+                              className={
+                                prob.awayProb > prob.homeProb ? "winning" : ""
+                              }
+                            >
+                              {prob.awayProb}%
+                            </span>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  ) : (
+                    <strong>
+                      {match.home_score} - {match.away_score}
+                    </strong>
+                  )}
+                </td>
+                <td style={{ textAlign: "center", verticalAlign: "middle" }}>
                   <p
                     style={{
                       display: "flex",
@@ -310,115 +454,197 @@ export const Schedule = () => {
               </tr>
               {expandedIndex === index && (
                 <tr style={{ backgroundColor: "transparent" }}>
-                  <td colSpan="3">
+                  <td colSpan="4">
                     <div className="game-details">
-                      <div className="game-details-roster">
-                        <p>Team Rosters</p>
-                        <div className="game-details-teams">
-                          <span
-                            onClick={() =>
-                              handleTeamOverview(match.homeTeam?.name)
-                            }
-                          >
-                            {match.homeTeam?.name}
-                          </span>
-                          {match.homePlayers.map((p) => (
-                            <text
-                              onClick={() => handlePlayerOverview(p.id)}
-                              key={p.id}
-                              style={{ fontSize: "18px", padding: "5px" }}
-                            >
-                              {p.name}
-                            </text>
-                          ))}
-                        </div>
-
-                        <div className="game-details-teams">
-                          <span
-                            onClick={() =>
-                              handleTeamOverview(match.awayTeam?.name)
-                            }
-                          >
-                            {match.awayTeam?.name}
-                          </span>
-                          {match.awayPlayers.map((p) => (
-                            <text
-                              onClick={() => handlePlayerOverview(p.id)}
-                              key={p.id}
-                              style={{ fontSize: "18px", padding: "5px" }}
-                            >
-                              {p.name}
-                            </text>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="game-details-overview">
-                        <p>
-                          The match ended at:{" "}
-                          <strong>{formattedDate(match.match_date)}</strong>
-                        </p>
-                        <p>
-                          Match ending score:{" "}
-                          <strong>
-                            {match.home_score} - {match.away_score}
-                          </strong>
-                        </p>
-                        <p>Most valuable player in the match:</p>
-                        <div
-                          className="mvp-card"
-                          onClick={() => handlePlayerOverview(tempMVP.id)}
-                        >
-                          <div className="mvp-name">
-                            <ul className="mvp-stats">
-                              <h2 style={{ margin: "0 0 20px 0" }}>
-                                {tempMVP.name}
-                              </h2>
-                              <li
-                                style={{
-                                  fontSize: "26px",
-                                  marginBottom: "15px",
-                                  opacity: "0.5",
-                                }}
-                              >
-                                Game Scores:
-                              </li>
-                              <li>Position: {tempMVP.position}</li>
-                              <li>Number: {tempMVP.number}</li>
-                              <li>PTS: {tempMVP.points}</li>
-                              <li>REB: {tempMVP.rebounds}</li>
-                              <li>AST: {tempMVP.assists}</li>
-                              <li>
-                                Fouls:{" "}
-                                {tempMVP.fouls_received
-                                  ? tempMVP.fouls_committed
-                                  : 0}
-                              </li>
-                            </ul>
-                            <img
-                              style={{
-                                alignItems: "center",
-                                justifyContent: "right",
-                                width: "40%",
-                              }}
-                              src={`http://localhost:5000${tempMVP.logo}`}
-                              alt="Description"
-                            ></img>
+                      {new Date(match.match_date) > today ? (
+                        // Future match view
+                        <div className="game-prediction-details">
+                          <h3 style={{ fontSize: "32px" }}>
+                            Match Predictions
+                          </h3>
+                          <div className="prediction-arguments">
+                            <div className="team-arguments">
+                              <center>
+                                <h4
+                                  style={{
+                                    fontSize: "26px",
+                                    borderBottom: "3px solid #00b7ff",
+                                  }}
+                                >
+                                  {match.homeTeam?.name} Advantages
+                                </h4>
+                                {(() => {
+                                  const args = generateWinArguments(
+                                    match.homeTeam,
+                                    match.awayTeam
+                                  );
+                                  return (
+                                    <ul>
+                                      {args.home.map((arg, i) => (
+                                        <li
+                                          style={{
+                                            fontSize: "20px",
+                                            opacity: "0.5",
+                                          }}
+                                          key={i}
+                                        >
+                                          {arg}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  );
+                                })()}
+                              </center>
+                            </div>
+                            <div className="team-arguments">
+                              <center>
+                                <h4
+                                  style={{
+                                    fontSize: "26px",
+                                    borderBottom: "3px solid #00b7ff",
+                                  }}
+                                >
+                                  {match.awayTeam?.name} Advantages
+                                </h4>
+                                {(() => {
+                                  const args = generateWinArguments(
+                                    match.homeTeam,
+                                    match.awayTeam
+                                  );
+                                  return (
+                                    <ul>
+                                      {args.away.map((arg, i) => (
+                                        <li
+                                          style={{
+                                            fontSize: "20px",
+                                            opacity: "0.5",
+                                          }}
+                                          key={i}
+                                        >
+                                          {arg}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  );
+                                })()}
+                              </center>
+                            </div>
                           </div>
                         </div>
-                        <div className="game-details-overview-group">
-                          <string onClick={() => handleMatchOverview()}>
-                            More Information
-                          </string>
-                          <ArrowRight
-                            style={{
-                              width: "32px",
-                              height: "32px",
-                            }}
-                            onClick={() => handleMatchOverview()}
-                          ></ArrowRight>
-                        </div>
-                      </div>
+                      ) : (
+                        // Past match view (existing code)
+                        <>
+                          <div className="game-details-roster">
+                            <p>Team Rosters</p>
+                            <div className="game-details-teams">
+                              <span
+                                onClick={() =>
+                                  handleTeamOverview(match.homeTeam?.name)
+                                }
+                              >
+                                {match.homeTeam?.name}
+                              </span>
+                              {match.homePlayers.map((p) => (
+                                <text
+                                  onClick={() => handlePlayerOverview(p.id)}
+                                  key={p.id}
+                                  style={{ fontSize: "18px", padding: "5px" }}
+                                >
+                                  {p.name}
+                                </text>
+                              ))}
+                            </div>
+
+                            <div className="game-details-teams">
+                              <span
+                                onClick={() =>
+                                  handleTeamOverview(match.awayTeam?.name)
+                                }
+                              >
+                                {match.awayTeam?.name}
+                              </span>
+                              {match.awayPlayers.map((p) => (
+                                <text
+                                  onClick={() => handlePlayerOverview(p.id)}
+                                  key={p.id}
+                                  style={{ fontSize: "18px", padding: "5px" }}
+                                >
+                                  {p.name}
+                                </text>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="game-details-overview">
+                            <p>
+                              The match ended at:{" "}
+                              <strong>{formattedDate(match.match_date)}</strong>
+                            </p>
+                            <p>
+                              Match ending score:{" "}
+                              <strong>
+                                {match.home_score} - {match.away_score}
+                              </strong>
+                            </p>
+                            <p>Most valuable player in the match:</p>
+                            <div
+                              className="mvp-card"
+                              onClick={() => handlePlayerOverview(tempMVP.id)}
+                            >
+                              <div className="mvp-name">
+                                <div className="mvp-stats">
+                                  <h2 style={{ margin: "0 0 20px 0" }}>
+                                    {tempMVP.name}
+                                  </h2>
+                                  <li
+                                    style={{
+                                      fontSize: "26px",
+                                      marginBottom: "15px",
+                                      opacity: "0.5",
+                                    }}
+                                  >
+                                    Game Scores:
+                                  </li>
+                                  <li>Position: {tempMVP.position}</li>
+                                  <li>Number: {tempMVP.number}</li>
+                                  <li>PTS: {tempMVP.points}</li>
+                                  <li>REB: {tempMVP.rebounds}</li>
+                                  <li>AST: {tempMVP.assists}</li>
+                                  <li>
+                                    Fouls:{" "}
+                                    {tempMVP.fouls_received
+                                      ? tempMVP.fouls_committed
+                                      : 0}
+                                  </li>
+                                </div>
+                                <img
+                                  style={{
+                                    alignItems: "center",
+                                    justifyContent: "right",
+                                    width: "40%",
+                                  }}
+                                  src={`http://localhost:5000${tempMVP.photo}`}
+                                  alt="Player photo"
+                                />
+                              </div>
+                            </div>
+                            <div className="game-details-overview-group">
+                              <string
+                                onClick={() => handleMatchOverview(match.id)}
+                              >
+                                More Information
+                              </string>
+                              <ArrowRight
+                                style={{
+                                  width: "32px",
+                                  height: "32px",
+                                }}
+                                onClick={() => handleMatchOverview(match.id)}
+                              ></ArrowRight>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>

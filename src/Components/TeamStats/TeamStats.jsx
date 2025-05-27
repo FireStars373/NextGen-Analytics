@@ -55,7 +55,7 @@ const teamData = {
       blocks: 5,
     },
   ],
-  Baskonia: [
+  "Baskonia Vitoria-Gasteiz": [
     {
       points_per_game: 85,
       points_allowed: 82,
@@ -157,7 +157,7 @@ const teamData = {
     },
   ],
 
-  "CSKA Moscow": [
+  "Paris Basketball": [
     {
       points_per_game: 89,
       points_allowed: 81,
@@ -208,7 +208,7 @@ const teamData = {
     },
   ],
 
-  Olympiacos: [
+  "Olympiacos Piraeus": [
     {
       points_per_game: 86,
       points_allowed: 79,
@@ -259,7 +259,7 @@ const teamData = {
     },
   ],
 
-  Fenerbahçe: [
+  "Fenerbahce Beko Istanbul": [
     {
       points_per_game: 88,
       points_allowed: 79,
@@ -310,7 +310,7 @@ const teamData = {
     },
   ],
 
-  "Anadolu Efes": [
+  "Anadolu Efes Istanbul": [
     {
       points_per_game: 90,
       points_allowed: 82,
@@ -361,7 +361,7 @@ const teamData = {
     },
   ],
 
-  "Maccabi Tel Aviv": [
+  "Maccabi Playtica Tel Aviv": [
     {
       points_per_game: 89,
       points_allowed: 80,
@@ -412,7 +412,7 @@ const teamData = {
     },
   ],
 
-  Panathinaikos: [
+  "Panathinaikos AKTOR Athens": [
     {
       points_per_game: 86,
       points_allowed: 82,
@@ -463,7 +463,7 @@ const teamData = {
     },
   ],
 
-  "Bayern Munich": [
+  "FC Bayern Munich": [
     {
       points_per_game: 84,
       points_allowed: 83,
@@ -514,7 +514,7 @@ const teamData = {
     },
   ],
 
-  ASVEL: [
+  "LDLC ASVEL Villeurbanne": [
     {
       points_per_game: 82,
       points_allowed: 85,
@@ -564,7 +564,7 @@ const teamData = {
       blocks: 4,
     },
   ],
-  "Olimpia Milano": [
+  "EA7 Emporio Armani Milan": [
     {
       points_per_game: 87,
       points_allowed: 80,
@@ -615,7 +615,7 @@ const teamData = {
     },
   ],
 
-  Partizan: [
+  "Partizan Mozzart Bet Belgrade": [
     {
       points_per_game: 88,
       points_allowed: 80,
@@ -717,7 +717,7 @@ const teamData = {
     },
   ],
 
-  "Virtus Bologna": [
+  "Virtus Segafredo Bologna": [
     {
       points_per_game: 86,
       points_allowed: 82,
@@ -768,7 +768,7 @@ const teamData = {
     },
   ],
 
-  Valencia: [
+  "Crvena Zvezda": [
     {
       points_per_game: 85,
       points_allowed: 83,
@@ -1299,10 +1299,16 @@ export const TeamStats = () => {
             </tbody>
           </table>
         </div>
+        {/*- Upcoming games section 
+
+
         <div className="newest-change-card">
           <h2>Upcoming Games</h2>
           <h2>Previous Games</h2>
         </div>
+        
+        
+        -*/}
       </div>
       <BetOverlay />
     </div>

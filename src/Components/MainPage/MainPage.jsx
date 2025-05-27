@@ -52,8 +52,8 @@ export const MainPage = () => {
   const handleTeamOverview = (team) => {
     navigate(`/TeamStats/${team}`);
   };
-  const handleMatchOverview = () => {
-    navigate(`/MatchDetails`);
+  const handleMatchOverview = (matchId) => {
+    navigate(`/MatchDetails/${matchId}`);
   };
   const handlePlayerOverview = (player) => {
     navigate(`/TeamPlayers/${player}`);
@@ -89,31 +89,35 @@ export const MainPage = () => {
             >
               <div className="top-player-rank">{index + 1}</div>
               <div className="top-player-photo">
-                <img src={player.photo} alt={player.name} />
+                <img
+                  style={{ width: "130px" }}
+                  src={`http://localhost:5000${player.photo}`}
+                  alt={`${player.name} photo`}
+                />
               </div>
               <div className="top-player-info">
-                <h3>{player.name}</h3>
                 <center>
-                  <p>
+                  <h3 style={{ fontSize: "32px" }}>{player.name}</h3>
+                  <p style={{ opacity: "50%" }}>
                     {player.team} | {player.position}
                   </p>
+                  <div className="top-player-stats">
+                    <div className="stat">
+                      <text>MIN</text>
+                      <text className="stat-value">{player.minutes || 0}</text>
+                    </div>
+                    <div className="stat">
+                      <text>PTS</text>
+                      <text className="stat-value">{player.points}</text>
+                    </div>
+                    <div className="stat-highlight">
+                      <text style={{ fontWeight: "bold" }}>ERR</text>
+                      <text className="stat-value">
+                        {calculateEfficiencyRating(player)}
+                      </text>
+                    </div>
+                  </div>
                 </center>
-                <div className="top-player-stats">
-                  <div className="stat">
-                    <text>MIN</text>
-                    <text className="stat-value">{player.minutes || 0}</text>
-                  </div>
-                  <div className="stat">
-                    <text>PTS</text>
-                    <text className="stat-value">{player.points}</text>
-                  </div>
-                  <div className="stat-highlight">
-                    <text style={{ fontWeight: "bold" }}>ERR</text>
-                    <text className="stat-value">
-                      {calculateEfficiencyRating(player)}
-                    </text>
-                  </div>
-                </div>
               </div>
             </div>
           ))}
@@ -137,7 +141,7 @@ export const MainPage = () => {
                 {/* Home Team Section */}
                 <div style={{ textAlign: "center", margin: "0 20px" }}>
                   <img
-                    style={{ height: "100px", width: "100px" }}
+                    style={{ height: "100px" }}
                     src={`${BACKEND_URL}${game.homeTeam.logo}`}
                     alt={`${game.homeTeam.name} logo`}
                     onClick={() => handleTeamOverview(game.homeTeam.name)}
@@ -153,7 +157,7 @@ export const MainPage = () => {
                 {/* Away Team Section */}
                 <div style={{ textAlign: "center", margin: "0 20px" }}>
                   <img
-                    style={{ height: "100px", width: "100px" }}
+                    style={{ height: "100px" }}
                     src={`${BACKEND_URL}${game.awayTeam.logo}`}
                     alt={`${game.awayTeam.name} logo`}
                     onClick={() => handleTeamOverview(game.awayTeam.name)}
@@ -174,13 +178,16 @@ export const MainPage = () => {
                   fontSize: "36px",
                 }}
               >
-                <p style={{ fontWeight: "bold", color: "grey" }}>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    color: "grey",
+                    marginBottom: "50px",
+                  }}
+                >
                   {new Date(game.match_date).toLocaleDateString()}
                 </p>
               </div>
-              <p
-                style={{ borderBottom: "2px solid #00b7ff", width: "100%" }}
-              ></p>
             </div>
           ))
         ) : (
@@ -285,7 +292,7 @@ export const MainPage = () => {
             <div className="game-details-overview-group">
               <text
                 style={{ fontSize: "28px" }}
-                onClick={() => handleMatchOverview()}
+                onClick={() => handleMatchOverview(latestGame.id)}
               >
                 More Information
               </text>
@@ -294,7 +301,7 @@ export const MainPage = () => {
                   width: "32px",
                   height: "32px",
                 }}
-                onClick={() => handleMatchOverview()}
+                onClick={() => handleMatchOverview(latestGame.id)}
               ></ArrowRight>
             </div>
           </div>
@@ -335,12 +342,12 @@ export const MainPage = () => {
     {
       name: "FantasyKingX",
       rating: 3,
-      text: "Tons of potential. Right now it’s great, but with a few more features or updates, it could be the go-to spot for basketball data.",
+      text: "Tons of potential. Right now it's great, but with a few more features or updates, it could be the go-to spot for basketball data.",
     },
     {
       name: "CourtsideCritic",
       rating: 4,
-      text: "I use it almost daily. It’s not perfect, but it’s better than most and keeps improving. Excited to see where it goes.",
+      text: "I use it almost daily. It's not perfect, but it's better than most and keeps improving. Excited to see where it goes.",
     },
   ];
   const allReviews = [...reviews, ...reviews];

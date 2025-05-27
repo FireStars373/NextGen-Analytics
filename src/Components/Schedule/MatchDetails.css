@@ -1,0 +1,217 @@
+.match-details-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #fdfbf4;
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* Match Header */
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #212121;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  color: #fdfbf4;
+}
+
+.team-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.team-section img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.team-section h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  text-align: center;
+  color: #fdfbf4;
+}
+
+.score-section {
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.score-section h1 {
+  font-size: 3rem;
+  margin: 0;
+  font-weight: bold;
+  color: #fdfbf4;
+}
+
+.score-section p {
+  margin: 0.5rem 0 0;
+  color: #888;
+}
+
+/* Top Performers Section */
+.top-performers-section {
+  background: #212121;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  color: #fdfbf4;
+}
+
+.top-performers-section h3 {
+  margin: 0 0 1.5rem;
+  color: #fdfbf4;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #00b7ff;
+  padding-bottom: 0.5rem;
+}
+
+.top-performers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.player-card {
+  background: #303030;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+  margin-bottom: 1rem;
+  border: 1px solid #444;
+}
+
+.player-card:hover {
+  transform: translateY(-2px);
+  border-color: #00b7ff;
+}
+
+/* Team Stats Section */
+.team-stats {
+  background: #212121;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  color: #fdfbf4;
+}
+
+.team-stats h3,
+.team-stats h4 {
+  margin: 0 0 1.5rem;
+  color: #fdfbf4;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #00b7ff;
+  padding-bottom: 0.5rem;
+}
+
+.stats-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #444;
+}
+
+.stats-table th {
+  background: #303030;
+  font-weight: 600;
+  color: #fdfbf4;
+}
+
+.stats-table td {
+  color: #fdfbf4;
+  background: #252525;
+}
+
+/* Remove hover effect */
+.stats-table tr:nth-child(even) td {
+  background: #2a2a2a;
+}
+
+/* Player Stats */
+.player-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.player-shooting {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  background: #252525;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  border: 1px solid #444;
+}
+
+.player-shooting div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background: #303030;
+}
+
+.player-shooting span:first-child {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.player-shooting span:last-child {
+  font-size: 1.1rem;
+  color: #fdfbf4;
+  font-weight: 500;
+}
+
+.positive {
+  color: #4caf50 !important;
+}
+
+.negative {
+  color: #f44336 !important;
+}
+
+/* All Players Stats */
+.all-players-stats {
+  background: #212121;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.all-players-stats h3 {
+  margin: 0 0 1.5rem;
+  color: #fdfbf4;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #00b7ff;
+  padding-bottom: 0.5rem;
+}

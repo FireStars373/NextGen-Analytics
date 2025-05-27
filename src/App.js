@@ -16,6 +16,7 @@ import { Settings } from "./Components/Settings/Settings";
 import { TeamPlayers } from "./Components/TeamPlayers/TeamPlayers";
 import { TeamStats } from "./Components/TeamStats/TeamStats";
 import CompareTeams from "./Components/CompareTeams/CompareTeams";
+import { MatchDetails } from "./Components/Schedule/MatchDetails";
 
 import "./App.css";
 
@@ -45,6 +46,7 @@ function Layout() {
         <Route path="/Settings" element={<Settings />} />
         <Route path="/TeamPlayers/:PlayersId" element={<TeamPlayers />} />
         <Route path="/TeamStats/:teamName" element={<TeamStats />} />
+        <Route path="/MatchDetails/:matchId" element={<MatchDetails />} />
         <Route
           path="/CompareTeams/:team1Name/:team2Name"
           element={<CompareTeams />}
